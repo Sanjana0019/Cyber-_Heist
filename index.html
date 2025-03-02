@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER HEIST</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background container -->
+    <div class="bg-container"></div>
+    
+    <!-- Main container -->
+    <div class="container">
+        <!-- Navigation buttons -->
+        <div class="nav-buttons">
+            <button class="btn btn-blue btn-instructions" onclick="openInstructionsModal()">INSTRUCTIONS</button>
+            <button class="btn btn-pink btn-exit" onclick="openExitModal()">EXIT</button>
+        </div>
+        
+        <!-- Main title -->
+        <h1 class="title">CYBER HEIST</h1>
+        
+        <!-- Start button -->
+        <div class="start-btn-container">
+            <button class="btn btn-primary" onclick="showLevels()">START MISSION</button>
+        </div>
+        
+        <!-- Levels container -->
+        <div class="levels-container" id="levelsContainer">
+            <div class="level-box">
+                <h2 class="level-title">Level 1</h2>
+                <p>Spam Defender</p>
+                <a href="level1.html" class="btn btn-primary level-btn" id="level1Btn">PLAY</a>
+            </div>
+            
+            <div class="level-box level-locked" id="level2Box">
+                <h2 class="level-title">Level 2</h2>
+                <p>Firewall Breach</p>
+                <a href="level2.html" class="btn btn-primary level-btn" id="level2Btn" disabled>LOCKED</a>
+            </div>
+            
+            <div class="level-box level-locked">
+                <h2 class="level-title">Level 3</h2>
+                <p>Encryption Master</p>
+                <a href="level3.html" class="btn btn-primary level-btn" id="level3Btn" disabled>LOCKED</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Exit confirmation modal -->
+    <div class="modal" id="exitModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Are you sure?</h2>
+            <p class="modal-text">Do you really want to exit the Cyber Heist mission?</p>
+            <div class="modal-buttons">
+                <button class="btn btn-pink" onclick="exitGame()">YES</button>
+                <button class="btn btn-blue" onclick="closeModal('exitModal')">NO</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Instructions modal -->
+    <div class="modal" id="instructionsModal">
+        <div class="modal-content">
+            <h2 class="modal-title">How to Play</h2>
+            <div class="modal-text">
+                <p>You are in your office, as a cybersecurity investigator working for a top security firm. A hacker is trying to steal sensitive data, and your job is to track them down and stop the attack before it's too late.</p>
+                <p>Unlock each level and protect the cyber system from getting hacked. Good luck, agent. Protect the system at all costs!</p>
+            </div>
+            <button class="btn btn-blue" onclick="closeModal('instructionsModal')">UNDERSTOOD</button>
+        </div>
+    </div>
+    <script src="scriptt.js"></script>
+</body>
+</html>

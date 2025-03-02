@@ -1,0 +1,396 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+:root {
+    --neon-blue: #00f3ff;
+    --neon-pink: #ff00e6;
+    --neon-green: #0fff50;
+    --dark-bg: #0a0a0a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Orbitron', sans-serif;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: white;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Background image container */
+.bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+   
+}
+
+.bg-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('mainpage.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+    filter: blur(1.5px);
+}
+
+/* Main container */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+}
+
+/* Title styling */
+.title {
+    font-size: 5rem;
+    font-weight: 900;
+    margin: 30px 0;
+    text-align: center;
+    text-transform: uppercase;
+    background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+    animation: pulse 2s infinite;
+}
+
+.title::before, .title::after {
+    content: 'CYBER HEIST';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.title::before {
+    text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.title::after {
+    text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink);
+    animation: glow 2s ease-in-out infinite alternate-reverse;
+}
+
+/* Button styling */
+.btn {
+    background-color: transparent;
+    color: white;
+    padding: 12px 30px;
+    border: 2px solid;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin: 10px;
+    text-transform: uppercase;
+    z-index: 1;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+    z-index: -1;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+}
+
+.btn-primary:hover {
+    background-color: var(--neon-green);
+    color: black;
+    box-shadow: 0 0 20px var(--neon-green);
+}
+
+.btn-blue {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+.btn-blue:hover {
+    background-color: var(--neon-blue);
+    color: black;
+    box-shadow: 0 0 20px var(--neon-blue);
+}
+
+.btn-pink {
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
+}
+
+.btn-pink:hover {
+    background-color: var(--neon-pink);
+    color: black;
+    box-shadow: 0 0 20px var(--neon-pink);
+}
+
+/* Button positioning */
+.btn-exit {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.btn-instructions {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.start-btn-container {
+    margin-top: 50px;
+}
+
+/* Pop-up modal styling */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background-color: rgba(25, 25, 35, 0.95);
+    border: 2px solid var(--neon-blue);
+    box-shadow: 0 0 20px var(--neon-blue);
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    animation: modalAppear 0.3s forwards;
+}
+
+.modal-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
+}
+
+.modal-text {
+    margin-bottom: 30px;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Levels page styling */
+.levels-container {
+    display: none;
+    width: 100%;
+    max-width: 1000px;
+    gap: 30px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.level-box {
+    background-color: rgba(25, 25, 35, 0.7);
+    border: 2px solid var(--neon-blue);
+    border-radius: 10px;
+    padding: 30px;
+    width: 300px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.level-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px var(--neon-blue);
+}
+
+.level-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.level-locked {
+    position: relative;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.level-locked::before {
+    content: '🔒';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px var(--neon-pink);
+}
+
+.level-btn {
+    margin-top: 20px;
+}
+
+/* Congratulations popup */
+.congrats-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.congrats-content {
+    background-color: rgba(25, 25, 35, 0.95);
+    border: 2px solid var(--neon-green);
+    box-shadow: 0 0 20px var(--neon-green);
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    animation: modalAppear 0.3s forwards;
+}
+
+.congrats-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: var(--neon-green);
+    text-shadow: 0 0 10px var(--neon-green);
+}
+
+/* Animations */
+@keyframes glow {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .title {
+        font-size: 3rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+    
+    .btn-exit, .btn-instructions {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .level-box {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 2rem;
+    }
+    
+    .btn-exit, .btn-instructions {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        margin: 10px 5px;
+    }
+    
+    .container {
+        padding-top: 60px;
+    }
+    
+    .nav-buttons {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        position: absolute;
+        top: 10px;
+        left: 0;
+        padding: 0 10px;
+    }
+}

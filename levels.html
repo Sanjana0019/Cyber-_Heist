@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Heist - Levels</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="levels-container">
+        <h1>Select a Level</h1>
+        
+        <div class="level-box" id="level-1">
+            <h2>Level 1</h2>
+            <p>Identify and stop suspicious links before they reach the system.</p>
+            <button class="play-btn" onclick="startLevel(1)">Play</button>
+        </div>
+
+        <div class="level-box locked" id="level-2">
+            <h2>Level 2 <span class="lock-icon">🔒</span></h2>
+            <p>Memorize and type strong passwords to block hackers.</p>
+            <button class="play-btn" onclick="startLevel(2)" disabled>Locked</button>
+        </div>
+
+        <div class="level-box locked" id="level-3">
+            <h2>Level 3 <span class="lock-icon">🔒</span></h2>
+            <p>Defend against advanced cyber threats in real-time.</p>
+            <button class="play-btn" onclick="startLevel(3)" disabled>Locked</button>
+        </div>
+    </div>
+
+    <!-- Congratulations Pop-up -->
+    <div id="congrats-popup" class="popup hidden">
+        <div class="popup-content">
+            <h2>Congratulations!</h2>
+            <p>You have completed this level.</p>
+            <button onclick="closePopup()">OK</button>
+        </div>
+    </div>
+    <button onclick="window.location.href='level1.html'">Play</button>
+
+    <script src="scriptt.js" defer></script>
+</body>
+</html>

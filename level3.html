@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Vault Heist – The Ultimate Defense</title>
+    <link rel="stylesheet" href="level3.css">
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div id="game-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <div class="title-container">
+                <h1>CYBER VAULT HEIST</h1>
+                <h2>THE ULTIMATE DEFENSE</h2>
+            </div>
+            <div class="game-description">
+                <p>A hacker is attempting to steal encrypted vault keys!</p>
+                <p>Solve high-speed logic puzzles to lock the vault before they crack it!</p>
+                <p>You must solve 10 puzzles and secure all 3 locks to win.</p>
+                <p>Beware of phishing attempts in the final stage!</p>
+            </div>
+            <button id="start-button">Start Mission</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-ui">
+                <div class="status-container">
+                    <div class="timer">Time: <span id="timer-value">60</span>s</div>
+                    <div class="progress">
+                        <span class="progress-label">Puzzles: <span id="puzzles-solved">0</span>/10</span>
+                    </div>
+                </div>
+                <div class="locks">
+                    <div class="lock" id="lock-1">1</div>
+                    <div class="lock" id="lock-2">2</div>
+                    <div class="lock" id="lock-3">3</div>
+                </div>
+                <div class="hint-container">
+                    <button id="hint-button">Hint</button>
+                    <div id="hint-tooltip" class="hint-tooltip"></div>
+                </div>
+            </div>
+
+            <div class="puzzle-container">
+                <!-- Pattern Recognition Puzzle -->
+                <div class="puzzle" id="sequence-puzzle">
+                    <h3>Pattern Recognition</h3>
+                    <p>Find the missing number to complete the sequence:</p>
+                    <div class="sequence-container" id="sequence-display"></div>
+                    <p>Choose the correct number:</p>
+                    <div class="sequence-container" id="sequence-options"></div>
+                </div>
+
+                <!-- Memory Test Puzzle -->
+                <div class="puzzle" id="memory-puzzle">
+                    <h3>Memory Test</h3>
+                    <p>Memorize the following code:</p>
+                    <div class="memory-display" id="memory-display"></div>
+                    <p>Enter the code you saw:</p>
+                    <input type="text" class="memory-input" id="memory-input" maxlength="6">
+                    <button id="memory-submit">Submit</button>
+                </div>
+
+                <!-- Mismatched Codes Puzzle -->
+                <div class="puzzle" id="mismatch-puzzle">
+                    <h3>Find the Mismatched Code</h3>
+                    <p>One of these codes doesn't follow the pattern. Find it!</p>
+                    <div class="code-container" id="code-container"></div>
+                </div>
+
+                <!-- Phishing Attempt -->
+                <div class="puzzle" id="phishing-puzzle">
+                    <h3>Vault Access Request</h3>
+                    <div class="phishing-container">
+                        <div class="phishing-message" id="phishing-message">
+                            <p><strong>SYSTEM MESSAGE:</strong> Security protocol breach detected.</p>
+                            <p>To prevent data loss, an emergency transfer of encrypted vault keys is required.</p>
+                            <p>Please authorize immediate transfer to secure backup server: 192.168.0.<span id="phishing-ip">XX</span></p>
+                            <p><strong>Authentication:</strong> <span id="phishing-auth">XXXXX-XXXXX</span></p>
+                        </div>
+                        <div class="phishing-buttons">
+                            <button id="phishing-decline">Decline Transfer</button>
+                            <button id="phishing-accept">Authorize Transfer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="logs-container" id="logs">
+                <div class="log system">SYSTEM: Vault security activated. Hacker detected in the system.</div>
+                <div class="log hacker">HACKER: Beginning brute force attack on security vault...</div>
+            </div>
+            
+            <div class="hacker-attack" id="hacker-attack"></div>
+        </div>
+
+        <!-- Win Screen -->
+        <div id="win-screen" class="screen">
+            <h1 class="title-win">CYBER HEIST COMPLETE!</h1>
+            <h2 class="holographic">SYSTEM SECURED</h2>
+            
+            <div class="badge">
+                <div class="badge-text">CYBER GUARDIAN</div>
+            </div>
+            
+            <p>You have outsmarted the hackers and secured the system. Welcome to the elite defenders of cyberspace!</p>
+            <button id="play-again-win">Play Again</button>
+        </div>
+
+        <!-- Lose Screen -->
+        <div id="lose-screen" class="screen">
+            <h1>MISSION FAILED</h1>
+            <p id="lose-message">The hacker has stolen the vault keys!</p>
+            <button id="play-again-lose">Try Again</button>
+        </div>
+    </div>
+
+    <!-- Congratulations Popup -->
+    <div class="congrats-popup" id="congrats-popup">
+        <div class="congrats-content">
+            <h2 class="congrats-title">CONGRATULATIONS!</h2>
+            <p>You've successfully defended the vault and secured the system!</p>
+            <p>Your lightning-fast cyber skills have stopped the hacker in their tracks.</p>
+            <p>You've earned the title of ELITE CYBER GUARDIAN!</p>
+            <button id="continue-button">Continue</button>
+        </div>
+    </div>
+
+    <script src="level3.js"></script>
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firewall Defender: Stop the Hackers!</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #111;
+      color: #0f0;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    #game-container {
+      max-width: 800px;
+      margin: 0 auto;
+      border: 2px solid #0f0;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #0f0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    h1 {
+      color: #0f0;
+      margin-bottom: 5px;
+      text-shadow: 0 0 5px #0f0;
+    }
+    
+    .subtitle {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #aaa;
+    }
+    
+    #status-display {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    
+    #firewall-status {
+      font-size: 18px;
+    }
+    
+    #attack-display {
+      font-size: 18px;
+      color: #ff0;
+    }
+    
+    #code-display {
+      font-size: 32px;
+      letter-spacing: 5px;
+      margin: 20px 0;
+      min-height: 40px;
+      font-weight: bold;
+    }
+    
+    #timer-bar {
+      height: 10px;
+      width: 100%;
+      background-color: #333;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    
+    #timer-progress {
+      height: 100%;
+      width: 100%;
+      background-color: #0f0;
+      border-radius: 5px;
+      transition: width 0.1s linear;
+    }
+    
+    #user-input {
+      background-color: #222;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 10px 15px;
+      font-size: 24px;
+      width: 80%;
+      max-width: 300px;
+      letter-spacing: 3px;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    
+    #user-input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #0f0;
+    }
+    
+    #feedback {
+      font-size: 18px;
+      margin: 10px 0;
+      min-height: 24px;
+    }
+    
+    button {
+      background-color: #222;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      margin: 10px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    button:hover {
+      background-color: #2a2a2a;
+      box-shadow: 0 0 10px #0f0;
+    }
+    
+    button:focus {
+      outline: none;
+    }
+    
+    #firewall-meter {
+      width: 100%;
+      height: 20px;
+      background-color: #333;
+      margin: 10px 0;
+      position: relative;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    
+    #firewall-level {
+      height: 100%;
+      width: 100%;
+      background-color: #0f0;
+      transition: width 0.5s ease;
+      border-radius: 5px;
+    }
+    
+    .hacking-attempt {
+      position: absolute;
+      color: red;
+      font-size: 16px;
+      opacity: 0;
+      transform: translateY(0);
+    }
+    /* Congrats popup */
+.congrats-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+
+.congrats-popup.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.congrats-content {
+    background-color: var(--panel-color);
+    padding: 30px;
+    border-radius: 10px;
+    border: 2px solid var(--success-color);
+    max-width: 500px;
+    text-align: center;
+}
+
+.congrats-title {
+    color: var(--success-color);
+    margin-bottom: 20px;
+}
+
+    @keyframes flash {
+      0% { background-color: #111; }
+      50% { background-color: #600; }
+      100% { background-color: #111; }
+    }
+    
+    .instruction-text {
+      font-size: 16px;
+      color: #aaa;
+      margin: 10px 0;
+      text-align: left;
+    }
+    
+    .distraction {
+      position: absolute;
+      color: red;
+      font-weight: bold;
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    #game-over, #start-screen, #victory-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    
+    #game-over h2 {
+      color: #f00;
+      text-shadow: 0 0 10px #f00;
+      font-size: 32px;
+    }
+    
+    #start-screen h2, #victory-screen h2 {
+      color: #0f0;
+      text-shadow: 0 0 10px #0f0;
+      font-size: 32px;
+    }
+    
+    #game-stats {
+      margin: 20px 0;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+    
+    #progress-tracker {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      width: 100%;
+    }
+    
+    .progress-dot {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: #333;
+      border: 2px solid #0f0;
+    }
+    
+    .progress-dot.completed {
+      background-color: #0f0;
+      box-shadow: 0 0 5px #0f0;
+    }
+    
+    .progress-dot.failed {
+      background-color: #f00;
+      border-color: #f00;
+      box-shadow: 0 0 5px #f00;
+    }
+    
+    #success-counter {
+      font-size: 18px;
+      color: #0f0;
+      margin-top: 10px;
+    }
+    
+    @keyframes celebrate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <h1>FIREWALL DEFENDER</h1>
+    <p class="subtitle">Stop the Hackers!</p>
+    
+    <div id="start-screen">
+      <h2>FIREWALL DEFENDER</h2>
+      <p>Protect your system from hackers by confirming security codes before time runs out!</p>
+      <p class="instruction-text">
+        • A security code will appear on screen briefly<br>
+        • Memorize and type it correctly before the timer ends<br>
+        • Successfully stop at least 8 out of 10 cyber attacks to win<br>
+        • You can make up to 2 mistakes and still secure the system<br>
+        • Don't let the firewall strength reach zero!
+      </p>
+      <button id="start-button">START MISSION</button>
+    </div>
+    
+    <div id="game-over" class="hidden">
+      <h2>SYSTEM BREACH!</h2>
+      <p>The hackers have broken through your firewall!</p>
+      <div id="game-stats">
+        <p>Cyber attacks stopped: <span id="attacks-stopped">0</span>/10</p>
+        <p>Successful defenses: <span id="successes-count">0</span>/8 needed</p>
+        <p>Firewall strength remaining: 0%</p>
+      </div>
+      <button id="restart-button">RESTART MISSION</button>
+    </div>
+    
+    <div id="victory-screen" class="hidden">
+      <h2>SYSTEM SECURED!</h2>
+      <p>You've successfully defended against enough cyber attacks!</p>
+      <div id="victory-stats">
+        <p>Required defenses: 8/8 completed</p>
+        <p>Total attacks faced: <span id="total-attacks">10</span>/10</p>
+        <p>Firewall strength remaining: <span id="final-strength">100</span>%</p>
+        <p>Congratulations, Cyber Defender!</p>
+      </div>
+      <button id="play-again-button">PLAY AGAIN</button>
+    </div>
+    
+    <div id="status-display">
+      <div id="attack-display">Cyber Attack: 1/10</div>
+      <div id="firewall-status">Firewall: 100%</div>
+    </div>
+    
+    <div id="success-counter">Successful Defenses: 0/8 required</div>
+    
+    <div id="progress-tracker">
+      <div class="progress-dot" id="dot-1"></div>
+      <div class="progress-dot" id="dot-2"></div>
+      <div class="progress-dot" id="dot-3"></div>
+      <div class="progress-dot" id="dot-4"></div>
+      <div class="progress-dot" id="dot-5"></div>
+      <div class="progress-dot" id="dot-6"></div>
+      <div class="progress-dot" id="dot-7"></div>
+      <div class="progress-dot" id="dot-8"></div>
+      <div class="progress-dot" id="dot-9"></div>
+      <div class="progress-dot" id="dot-10"></div>
+    </div>
+    
+    <div id="firewall-meter">
+      <div id="firewall-level"></div>
+    </div>
+    
+    <div id="timer-bar">
+      <div id="timer-progress"></div>
+    </div>
+    
+    <div id="code-display"></div>
+    
+    <input type="text" id="user-input" autocomplete="off" placeholder="Type code here" maxlength="10">
+    
+    <div id="feedback"></div>
+    
+    <button id="submit-button">SUBMIT</button>
+  </div>
+  <script>
+    const codeDisplay = document.getElementById('code-display');
+    const userInput = document.getElementById('user-input');
+    const feedback = document.getElementById('feedback');
+    const submitButton = document.getElementById('submit-button');
+    const timerProgress = document.getElementById('timer-progress');
+    const firewallLevel = document.getElementById('firewall-level');
+    const firewallStatus = document.getElementById('firewall-status');
+    const attackDisplay = document.getElementById('attack-display');
+    const successCounter = document.getElementById('success-counter');
+    const gameContainer = document.getElementById('game-container');
+    const gameOver = document.getElementById('game-over');
+    const victoryScreen = document.getElementById('victory-screen');
+    const startScreen = document.getElementById('start-screen');
+    const startButton = document.getElementById('start-button');
+    const restartButton = document.getElementById('restart-button');
+    const playAgainButton = document.getElementById('play-again-button');
+    const attacksStoppedDisplay = document.getElementById('attacks-stopped');
+    const successesCountDisplay = document.getElementById('successes-count');
+    const finalStrengthDisplay = document.getElementById('final-strength');
+    const totalAttacksDisplay = document.getElementById('total-attacks');
+
+    let currentCode = '';
+    let timerInterval = null;
+    let currentAttack = 1;
+    let firewallStrength = 100;
+    let gameActive = false;
+    let attacksStopped = 0;
+    let successfulDefenses = 0;
+    let displayTime = 4000; // Time to show code (ms)
+    let inputTime = 10000; // Time to input code (ms) - now constant
+    let timeRemaining = 0;
+    let codeLength = 5; // Starting code length
+    const TOTAL_ATTACKS = 10; // Total number of attacks
+    const REQUIRED_SUCCESSES = 8; // Number of successes needed to win
+
+    // Character sets for generating codes
+    const easyCodes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const mediumCodes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    // Start the game when the start button is clicked
+    startButton.addEventListener('click', startGame);
+    restartButton.addEventListener('click', restartGame);
+    playAgainButton.addEventListener('click', restartGame);
+
+    // Submit button and Enter key handling
+    submitButton.addEventListener('click', checkCode);
+    userInput.addEventListener('keyup', function(event) {
+      if (event.key === 'Enter') {
+        checkCode();
+      }
+    });
+
+    // Generate a random security code
+    function generateCode(length, attack) {
+      let characters = easyCodes;
+      
+      if (attack >= 7) {
+        characters = mediumCodes;
+      }
+      
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return result;
+    }
+
+    // Start a new attack
+    function startAttack() {
+      // Update attack display
+      attackDisplay.textContent = `Cyber Attack: ${currentAttack}/${TOTAL_ATTACKS}`;
+      successCounter.textContent = `Successful Defenses: ${successfulDefenses}/${REQUIRED_SUCCESSES} required`;
+      
+      // Determine code length based on attack (max 6 characters)
+      codeLength = Math.min(4 + Math.floor(currentAttack / 3), 6);
+      
+      // Generate and display the new code
+      currentCode = generateCode(codeLength, currentAttack);
+      codeDisplay.textContent = currentCode;
+      userInput.value = '';
+      userInput.disabled = true;
+      submitButton.disabled = true;
+      feedback.textContent = 'MEMORIZE THE CODE!';
+      feedback.style.color = '#0f0';
+      
+      // Add minimal distractions in higher attack levels
+      if (currentAttack > 6) {
+        addDistractions(currentAttack - 5);
+      }
+      
+      // Start the display timer
+      setTimeout(function() {
+        // Hide the code after display time
+        codeDisplay.textContent = '?'.repeat(currentCode.length);
+        userInput.disabled = false;
+        submitButton.disabled = false;
+        userInput.focus();
+        feedback.textContent = 'ENTER THE CODE!';
+        
+        // Start the input timer
+        timeRemaining = inputTime;
+        startTimer();
+      }, displayTime);
+    }
+
+    // Start the timer for code input
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerProgress.style.width = '100%';
+      timerProgress.style.backgroundColor = '#0f0';
+      
+      timerInterval = setInterval(function() {
+        timeRemaining -= 100;
+        const percentage = (timeRemaining / inputTime) * 100;
+        timerProgress.style.width = percentage + '%';
+        
+        // Change color as time runs out
+        if (percentage < 30) {
+          timerProgress.style.backgroundColor = '#f00';
+        } else if (percentage < 60) {
+          timerProgress.style.backgroundColor = '#ff0';
+        }
+        
+        // Time's up
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          handleIncorrectCode('TIME EXPIRED!');
+        }
+      }, 100);
+    }
+
+    // Check if the entered code matches the current code
+    function checkCode() {
+      clearInterval(timerInterval);
+      
+      if (userInput.value === currentCode) {
+        handleCorrectCode();
+      } else {
+        handleIncorrectCode('INCORRECT CODE!');
+      }
+    }
+
+    // Handle a correct code entry
+    function handleCorrectCode() {
+      feedback.textContent = 'ACCESS GRANTED!';
+      feedback.style.color = '#0f0';
+      attacksStopped++;
+      successfulDefenses++;
+      
+      // Update success counter
+      successCounter.textContent = `Successful Defenses: ${successfulDefenses}/${REQUIRED_SUCCESSES} required`;
+      
+      // Update progress tracker
+      document.getElementById(`dot-${currentAttack}`).classList.add('completed');
+      
+      // Check if enough successes to win
+      if (successfulDefenses >= REQUIRED_SUCCESSES && currentAttack >= REQUIRED_SUCCESSES) {
+        victory();
+        return;
+      }
+      
+      // Increase attack counter
+      currentAttack++;
+      
+      // Check if all attacks completed
+      if (currentAttack > TOTAL_ATTACKS) {
+        victory();
+        return;
+      }
+      
+      attackDisplay.textContent = `Cyber Attack: ${currentAttack}/${TOTAL_ATTACKS}`;
+      
+      // Visual feedback
+      gameContainer.style.boxShadow = '0 0 30px #0f0';
+      setTimeout(() => {
+        gameContainer.style.boxShadow = '0 0 15px #0f0';
+      }, 500);
+      
+      // Start the next attack
+      setTimeout(startAttack, 1500);
+    }
+
+    // Handle an incorrect code entry
+    function handleIncorrectCode(message) {
+      feedback.textContent = message;
+      feedback.style.color = '#f00';
+      
+      // Update progress tracker with failed attempt
+      document.getElementById(`dot-${currentAttack}`).classList.add('failed');
+      
+      // Reduce firewall strength
+      firewallStrength = Math.max(0, firewallStrength - 20);
+      updateFirewallDisplay();
+      
+      // Visual feedback for breach attempt
+      gameContainer.style.animation = 'flash 0.5s';
+      setTimeout(() => {
+        gameContainer.style.animation = '';
+      }, 500);
+      
+      // Add fake hacking message
+      addHackingAttempt();
+      
+      // Check if game over due to firewall strength
+      if (firewallStrength <= 0) {
+        endGame();
+        return;
+      }
+      
+      // Check if impossible to reach required successes
+      const remainingAttacks = TOTAL_ATTACKS - currentAttack;
+      if (successfulDefenses + remainingAttacks < REQUIRED_SUCCESSES) {
+        endGame();
+        return;
+      }
+      
+      // Increase attack counter
+      currentAttack++;
+      
+      // Check if all attacks completed
+      if (currentAttack > TOTAL_ATTACKS) {
+        // Check if enough successes
+        if (successfulDefenses >= REQUIRED_SUCCESSES) {
+          victory();
+        } else {
+          endGame();
+        }
+        return;
+      }
+      
+      attackDisplay.textContent = `Cyber Attack: ${currentAttack}/${TOTAL_ATTACKS}`;
+      
+      // Continue to next attack
+      setTimeout(startAttack, 1500);
+    }
+
+    // Update the firewall strength display
+    function updateFirewallDisplay() {
+      firewallStatus.textContent = 'Firewall: ' + firewallStrength + '%';
+      firewallLevel.style.width = firewallStrength + '%';
+      
+      if (firewallStrength < 30) {
+        firewallLevel.style.backgroundColor = '#f00';
+      } else if (firewallStrength < 60) {
+        firewallLevel.style.backgroundColor = '#ff0';
+      } else {
+        firewallLevel.style.backgroundColor = '#0f0';
+      }
+    }
+
+    // Add visual hack attempt notification
+    function addHackingAttempt() {
+      const attempt = document.createElement('div');
+      attempt.className = 'hacking-attempt';
+      attempt.textContent = `BREACH ATTEMPT AT ${new Date().toLocaleTimeString()}`;
+      attempt.style.left = Math.random() * 60 + 20 + '%';
+      attempt.style.top = Math.random() * 40 + 30 + '%';
+      gameContainer.appendChild(attempt);
+      
+      // Animate the attempt notification
+      setTimeout(() => {
+        attempt.style.opacity = '1';
+        attempt.style.color = '#f00';
+      }, 10);
+      
+      setTimeout(() => {
+        attempt.style.opacity = '0';
+        setTimeout(() => {
+          gameContainer.removeChild(attempt);
+        }, 1000);
+      }, 2000);
+    }
+
+    // Add visual distractions
+    function addDistractions(count) {
+      const distractionCount = Math.min(count, 3);
+      
+      for (let i = 0; i < distractionCount; i++) {
+        setTimeout(() => {
+          if (!gameActive) return;
+          
+          const distraction = document.createElement('div');
+          distraction.className = 'distraction';
+          distraction.textContent = ['WARNING', 'ALERT', 'ERROR'][Math.floor(Math.random() * 3)];
+          distraction.style.left = Math.random() * 80 + 10 + '%';
+          distraction.style.top = Math.random() * 80 + 10 + '%';
+          distraction.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+          gameContainer.appendChild(distraction);
+          
+          // Flash the distraction
+          setTimeout(() => {
+            distraction.style.opacity = '0.8';
+            setTimeout(() => {
+              distraction.style.opacity = '0';
+              setTimeout(() => {
+                if (gameContainer.contains(distraction)) {
+                  gameContainer.removeChild(distraction);
+                }
+              }, 500);
+            }, 300);
+          }, 10);
+        }, Math.random() * displayTime);
+      }
+    }
+
+    // End the game (loss)
+    function endGame() {
+      clearInterval(timerInterval);
+      gameActive = false;
+      
+      attacksStoppedDisplay.textContent = attacksStopped;
+      successesCountDisplay.textContent = successfulDefenses;
+      gameOver.classList.remove('hidden');
+      
+      userInput.disabled = true;
+      submitButton.disabled = true;
+    }
+    
+    // Victory (win)
+    function victory() {
+      clearInterval(timerInterval);
+      gameActive = false;
+      
+      finalStrengthDisplay.textContent = firewallStrength;
+      totalAttacksDisplay.textContent = currentAttack - 1;
+      victoryScreen.classList.remove('hidden');
+      
+      userInput.disabled = true;
+      submitButton.disabled = true;
+      
+      // Celebration animation
+      gameContainer.style.animation = 'celebrate 0.8s ease-in-out 3';
+      completeLevel(2);
+    }
+
+    // Restart the game
+    function restartGame() {
+      gameOver.classList.add('hidden');
+      victoryScreen.classList.add('hidden');
+      
+      currentAttack = 1;
+      firewallStrength = 100;
+      attacksStopped = 0;
+      successfulDefenses = 0;
+      
+      // Reset progress dots
+      for (let i = 1; i <= TOTAL_ATTACKS; i++) {
+        document.getElementById(`dot-${i}`).classList.remove('completed');
+        document.getElementById(`dot-${i}`).classList.remove('failed');
+      }
+      
+      attackDisplay.textContent = `Cyber Attack: ${currentAttack}/${TOTAL_ATTACKS}`;
+      successCounter.textContent = `Successful Defenses: ${successfulDefenses}/${REQUIRED_SUCCESSES} required`;
+      updateFirewallDisplay();
+      
+      startGame();
+    }
+
+    // Start the game
+    function startGame() {
+      startScreen.classList.add('hidden');
+      gameActive = true;
+      userInput.disabled = false;
+      submitButton.disabled = false;
+      startAttack();
+    }
+    function completeLevel(levelNumber) {
+  console.log(`Level ${levelNumber} completed!`);
+  // Store completion in localStorage
+  let progress = JSON.parse(localStorage.getItem('cyberHeistProgress') || '{"levelsCompleted":[false,false,false]}');
+  progress.levelsCompleted[levelNumber - 1] = true;
+  localStorage.setItem('cyberHeistProgress', JSON.stringify(progress));
+  console.log("Saved progress:", progress);
+
+  // Show congratulation modal
+    const congratsModal = document.getElementById('congratsModal');
+  if (congratsModal) {
+      congratsModal.style.display = 'flex';
+  } else {
+    console.error("Congrats modal not found in the DOM!");
+    // Emergency fallback
+    setTimeout(() => {
+    alert("Congratulations! Level completed!");
+    window.location.href = "index.html?levelCompleted=" + levelNumber;
+  }, 1000);
+}
+}
+
+  </script>
+</body>
+</html>

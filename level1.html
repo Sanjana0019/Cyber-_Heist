@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spam Defender Game</title>
+  <link rel="stylesheet" href="level1.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <div class="cyber-center">PROTECTED CYBER CENTER</div>
+    <div class="shield-container">
+      <div class="shield">1</div>
+      <div class="shield">2</div>
+      <div class="shield">3</div>
+    </div>
+    <div class="game-stats">
+      <div class="timer">60</div>
+      <div>Spam Removed: <span id="score">0</span></div>
+      <div>Mistakes: <span id="mistakes">0</span></div>
+    </div>
+  </div>
+  
+  <div class="game-overlay start-screen">
+    <h1>🛡️ SPAM DEFENDER</h1>
+    <div class="instructions">
+      <p>Suspicious links are rising toward your cyber center!</p>
+      <p>Click on <span style="color: #f44336; font-weight: bold;">SPAM LINKS</span> to remove them before they reach the top.</p>
+      <p>Be careful! Some safe links appear in red to confuse you.</p>
+      <p><strong>Game Over if:</strong></p>
+      <p>• 3 spam links reach the cyber center</p>
+      <p>• You click more than 3 safe links by mistake</p>
+    </div>
+    <button id="start-button">START GAME</button>
+  </div>
+  
+  <div class="game-overlay game-over hidden">
+    <h2>GAME OVER</h2>
+    <div class="results">
+      <p>Time survived: <span id="time-survived">0</span> seconds</p>
+      <p>Spam links removed: <span id="final-score">0</span></p>
+      <p>Mistakes made: <span id="final-mistakes">0</span></p>
+    </div>
+    <button id="restart-button">PLAY AGAIN</button>
+  </div>
+   <!-- Level completion congratulations modal -->
+   <div class="congrats-modal" id="congratsModal">
+    <div class="congrats-content">
+        <h2 class="congrats-title">MISSION ACCOMPLISHED!</h2>
+        <p class="modal-text">Congratulations, agent! You've successfully completed this level and protected the system from cyber threats.</p>
+        <a href="index.html" class="btn btn-primary" id="continueBtn">CONTINUE</a>
+    </div>
+</div>
+  <!-- Update your level buttons to call the correct functions -->
+<div class="level-box">
+  <h2 class="level-title">Level 1</h2>
+  <p>Spam Defender</p>
+  <button class="btn btn-primary level-btn" onclick="startLevel(1)">PLAY</button>
+</div>
+
+  <script src="levels.js">
+document.addEventListener('DOMContentLoaded', function() {
+  const continueBtn = document.getElementById('continueBtn');
+  if (continueBtn) {
+    continueBtn.addEventListener('click', function() {
+      // Navigate back to index with level completed parameter
+      const levelNum = window.location.pathname.includes('level1') ? 1 : 
+                       window.location.pathname.includes('level2') ? 2 : 3;
+      window.location.href = "index.html?levelCompleted=" + levelNum;
+    });
+  }
+});
+  </script>
+</body>
+</html>
